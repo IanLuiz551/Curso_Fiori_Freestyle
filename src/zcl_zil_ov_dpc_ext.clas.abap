@@ -81,7 +81,9 @@ CLASS ZCL_ZIL_OV_DPC_EXT IMPLEMENTATION.
 
 
   method OVCABSET_GET_ENTITY.
-
+    er_entity-ordemid = 1.
+    er_entity-criadopor = 'Ian'.
+    er_entity-datacriacao = '20260108'.
   endmethod.
 
 
@@ -107,6 +109,7 @@ CLASS ZCL_ZIL_OV_DPC_EXT IMPLEMENTATION.
 
 
   method OVITEMSET_GET_ENTITYSET.
+
   endmethod.
 
 
