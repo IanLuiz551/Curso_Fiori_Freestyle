@@ -129,6 +129,31 @@ CLASS ZCL_ZIL_OV_DPC_EXT IMPLEMENTATION.
 
 
   method OVCABSET_GET_ENTITYSET.
+    Data: lt_cab TYPE STANDARD TABLE OF ZILTB_OVCAB.
+    DATA: ls_cab TYPE ZILTB_OVCAB.
+    DATA: ls_entityset LIKE LINE OF et_entityset.
+
+    SELECT *
+      INTO TABLE lt_cab
+      FROM ZILTB_OVCAB.
+
+    LOOP AT lt_cab INTO ls_cab.
+
+      CLEAR ls_entityset.
+
+      MOVE-CORRESPONDING ls_cab TO ls_entityset.
+
+      ls_entityset-criadopor = ls_cab-criacao_usuario.
+
+      CONVERT
+        DATE ls_cab-data_criacao
+        TIME ls_cab-data_hora
+        INTO TIME STAMP ls_entityset-datacriacao
+        TIME ZONE sy-zonlo.
+
+      APPEND ls_entityset to et_entityset.
+
+    ENDLOOP.
   endmethod.
 
 
@@ -185,6 +210,26 @@ CLASS ZCL_ZIL_OV_DPC_EXT IMPLEMENTATION.
 
 
   method OVITEMSET_GET_ENTITYSET.
+    DATA: ld_ordemid TYPE int4.
+    DATA: lt_ordemid_range TYPE RANGE OF int4.
+    DATA: ls_ordemid_range LIKE LINE OF lt_ordemid_range.
+    DATA: ls_key_tab       LIKE LINE OF it_key_tab.
+
+    READ TABLE it_key_tab INTO ls_key_tab WITH KEY name = 'OrdemId'.
+    IF sy-subrc <> 0.
+      ld_ordemid = ls_key_tab-value.
+
+      CLEAR ls_ordemid_range.
+      ls_ordemid_range-sign    = 'I'.
+      ls_ordemid_range-option  = 'EQ'.
+      ls_ordemid_range-low     = ld_ordemid.
+      APPEND ls_ordemid_range TO lt_ordemid_range.
+    ENDIF.
+
+    SELECT *
+      INTO CORRESPONDING FIELDS OF TABLE et_entityset
+      FROM ZILTB_OVITEM
+      WHERE ordemid IN lt_ordemid_range.
 
   endmethod.
 
