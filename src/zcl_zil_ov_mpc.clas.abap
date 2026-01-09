@@ -8,7 +8,7 @@ public section.
   types:
   begin of TS_OVCAB,
      ORDEMID type I,
-     DATACRIACAO type T,
+     DATACRIACAO type TIMESTAMP,
      CRIADOPOR type C length 20,
      CLIENTEID type I,
      TOTALITEM type P length 8 decimals 2,
@@ -402,7 +402,7 @@ lo_property->/iwbep/if_mgw_odata_annotatabl~create_annotation( 'sap' )->add(
         iv_value    = 'false' ).
 lo_property = lo_entity_type->create_property( iv_property_name = 'DataCriacao' iv_abap_fieldname = 'DATACRIACAO' ). "#EC NOTEXT
 lo_property->set_label_from_text_element( iv_text_element_symbol = '002' iv_text_element_container = gc_incl_name ).  "#EC NOTEXT
-lo_property->set_type_edm_time( ).
+lo_property->set_type_edm_datetime( ).
 lo_property->set_creatable( abap_false ).
 lo_property->set_updatable( abap_false ).
 lo_property->set_sortable( abap_false ).
@@ -663,7 +663,7 @@ lo_entity_set->set_filter_required( abap_false ).
 *&---------------------------------------------------------------------*
 
 
-  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20260108213132'.                  "#EC NOTEXT
+  CONSTANTS: lc_gen_date_time TYPE timestamp VALUE '20260109183127'.                  "#EC NOTEXT
   rv_last_modified = super->get_last_modified( ).
   IF rv_last_modified LT lc_gen_date_time.
     rv_last_modified = lc_gen_date_time.
